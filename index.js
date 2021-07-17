@@ -1,3 +1,4 @@
+/* main */
 const htmlData = [
     '<h1>Hello，我是 XXX</h1>',
     '<img src="http://placekitten.com/300/300">',
@@ -9,14 +10,22 @@ const htmlData = [
 
 setDraggableElmnts(htmlData);
 RenderSort('#app');
+document.querySelector('.btn.add').addEventListener('click', addItemBar);
+document.querySelector('.btn.save').addEventListener('click', saveHTML);
+const trash = document.querySelector('#trash');
+trash.addEventListener('drop', dropped);
+trash.addEventListener('dragenter', cancelDefault);
+trash.addEventListener('dragover', cancelDefault);
 
+
+/* functions */
 function setDraggableElmnts(contents) {
     const container = document.querySelector('ul.moveable');
 
     contents.forEach(data => {
         const li = document.createElement('li');
         const input = document.createElement('input');
-        
+
         li.setAttribute('draggable', 'true');
         li.addEventListener('dragstart', dragStart);
         li.addEventListener('drop', dropped);
@@ -25,7 +34,9 @@ function setDraggableElmnts(contents) {
 
         input.value = data;
         input.style.width = '90%';
-        input.onkeyup = function(){RenderSort('#app')};
+        input.onkeyup = function () {
+            RenderSort('#app');
+        };
 
         li.appendChild(input);
         container.appendChild(li);
@@ -44,12 +55,19 @@ function getItemIndex(e) {
 
 function dragStart(e) {
     const index = getItemIndex(e);
+    e.target.classList.add('drag');
     e.dataTransfer.setData('text/plain', index);
 }
 
 function dropped(e) {
     cancelDefault(e);
     const oldIndex = e.dataTransfer.getData('text/plain');
+    if (e.target.id == 'trash') {
+        document.querySelector('.drag').remove();
+        RenderSort('#app');
+        e.target.className = "fas fa-trash";
+        return;
+    }
     const newIndex = getItemIndex(e);
     const eParent = e.target.parentNode;
 
@@ -67,12 +85,19 @@ function switchElmnt(oldIndex, newIndex, ParentNode) {
 
     oldElmnt.remove();
     ParentNode.insertBefore(oldElmnt, ParentNode.children[newIndex]);
-    
+
     newElmnt.remove();
     ParentNode.insertBefore(newElmnt, ParentNode.children[oldIndex]);
 }
 
+function removeElmnt(index, ParentNode) {
+    ParentNode.children[index].remove();
+}
+
 function cancelDefault(e) {
+    if (e.target.id == 'trash') {
+        e.target.className = 'fas fa-trash-restore'
+    }
     e.preventDefault();
     e.stopPropagation();
     return false;
@@ -81,14 +106,67 @@ function cancelDefault(e) {
 function RenderSort(targetId) {
     const input = document.querySelectorAll('ul.moveable>li>input');
     const targetElmnt = document.querySelector(targetId);
-    targetElmnt.innerHTML = '<div class="preview"><span class="title">預覽</span></div>'
+    targetElmnt.innerHTML = '<div class="preview"><span class="title">預覽</span></div><hr />'
     input.forEach(item => {
         targetElmnt.innerHTML += item.value;
     })
 }
 
+function addItemBar() {
+    const target = document.querySelector('ul.moveable');
+    const li = document.createElement('li');
+    const input = document.createElement('input');
 
-// practice
+    li.setAttribute('draggable', 'true');
+    li.addEventListener('dragstart', dragStart);
+    li.addEventListener('drop', dropped);
+    li.addEventListener('dragenter', cancelDefault);
+    li.addEventListener('dragover', cancelDefault);
+
+    input.value = '';
+    input.placeholder = '輸入 html 程式碼'
+    input.style.width = '90%';
+    input.onkeyup = function () {
+        RenderSort('#app')
+    };
+
+    li.appendChild(input)
+    target.appendChild(li);
+}
+
+function saveHTML() {
+    const input = document.querySelectorAll('ul.moveable>li>input');
+    let content = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>你的網站</title>
+    </head>
+    <body>\n\n`;
+    input.forEach(item => {
+        content += item.value + '\n';
+    })
+    content += `\n    </body>\n</html>`;
+
+    console.log(content);
+    saveFile(content);
+}
+
+function saveFile(content) {
+    const fileBlob = new Blob(Array.from(content))
+    const url = URL.createObjectURL(fileBlob);
+    const a = document.createElement('a');
+    a.setAttribute('download', 'index.html');
+    a.setAttribute('target', '_blanl');
+    a.setAttribute('href', url);
+
+    a.click()
+}
+
+
+// practice function
 function setDraggableElmnts_old() {
     const li = document.querySelectorAll('ul.moveable>li');
 
