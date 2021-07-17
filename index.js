@@ -81,7 +81,7 @@ function cancelDefault(e) {
 function RenderSort(targetId) {
     const input = document.querySelectorAll('ul.moveable>li>input');
     const targetElmnt = document.querySelector(targetId);
-    targetElmnt.innerHTML = ''
+    targetElmnt.innerHTML = '<div class="preview"><span class="title">預覽</span></div>'
     input.forEach(item => {
         targetElmnt.innerHTML += item.value;
     })

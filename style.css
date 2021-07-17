@@ -28,7 +28,19 @@ li:hover {
 
 .container {
     display: block;
-    margin-top: 5vw;
+    border: #222 solid 2px;
+    margin: 5vw auto;
+    padding: 2vw;
     max-width: 90%;
     /* text-align: center; */
+}
+
+.preview {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.title {
+    font-size: calc(1.5rem + 0.5vw);
 }
