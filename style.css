@@ -32,7 +32,6 @@ li:hover {
     margin: 5vw auto;
     padding: 2vw;
     max-width: 90%;
-    /* text-align: center; */
 }
 
 .preview {
@@ -42,5 +41,12 @@ li:hover {
 }
 
 .title {
+    display: block;
     font-size: calc(1.5rem + 0.5vw);
+}
+
+.describe {
+    display: block;
+    font-size: calc(1.12rem + 0.3vw);
+    text-indent: calc((1.12rem+0.3vw)*2);
 }
