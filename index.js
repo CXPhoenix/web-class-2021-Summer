@@ -16,6 +16,7 @@ const trash = document.querySelector('#trash');
 trash.addEventListener('drop', dropped);
 trash.addEventListener('dragenter', cancelDefault);
 trash.addEventListener('dragover', cancelDefault);
+trash.addEventListener('dragleave', function(e){e.target.className = "fas fa-trash";});
 
 
 /* functions */
@@ -65,7 +66,6 @@ function dropped(e) {
     if (e.target.id == 'trash') {
         document.querySelector('.drag').remove();
         RenderSort('#app');
-        e.target.className = "fas fa-trash";
         return;
     }
     const newIndex = getItemIndex(e);
