@@ -1,0 +1,26 @@
+{
+  "name": "web-class-2021-summer",
+  "version": "1.0.0",
+  "description": "Web course in 2021 summer ===",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-css": "tailwind build ./css/tailwind.css -o ./css/app.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CXPhoenix/web-class-2021-Summer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CXPhoenix/web-class-2021-Summer/issues"
+  },
+  "homepage": "https://github.com/CXPhoenix/web-class-2021-Summer#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.3.1",
+    "postcss": "^8.3.5",
+    "tailwindcss": "^2.2.4"
+  }
+}
