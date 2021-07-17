@@ -66,6 +66,7 @@ function dropped(e) {
     if (e.target.id == 'trash') {
         document.querySelector('.drag').remove();
         RenderSort('#app');
+        e.target.className = "fas fa-trash";
         return;
     }
     const newIndex = getItemIndex(e);
