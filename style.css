@@ -8,8 +8,7 @@
 
 ul.moveable {
     list-style: none;
-    margin: 0px;
-
+    margin: 2px auto;
 }
 
 li {
@@ -49,4 +48,14 @@ li:hover {
     display: block;
     font-size: calc(1.12rem + 0.3vw);
     text-indent: calc((1.12rem+0.3vw)*2);
+}
+
+.btn {
+    padding: 10px;
+    margin-right: 2.3vw;
+    border: 0;
+    border-radius: 5px;
+    background: rgb(21, 36, 255);
+    color: #fff;
+    cursor: pointer;
 }
