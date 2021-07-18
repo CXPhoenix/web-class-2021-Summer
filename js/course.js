@@ -30,8 +30,12 @@ function setDraggableElmnts(contents) {
         li.setAttribute('draggable', 'true');
         li.addEventListener('dragstart', dragStart);
         li.addEventListener('drop', dropped);
-        li.addEventListener('dragenter', cancelDefault);
-        li.addEventListener('dragover', cancelDefault);
+        li.addEventListener('dragenter',cancelDefault);
+        li.addEventListener('dragover', function(e) {
+            cancelDefault(e);
+            placeHint(e);
+        });
+        li.addEventListener('dragleave', removePlaceHint);
 
         input.value = data;
         input.style.width = '90%';
@@ -58,10 +62,14 @@ function dragStart(e) {
     const index = getItemIndex(e);
     e.target.classList.add('drag');
     e.dataTransfer.setData('text/plain', index);
+    // 繞路的部分，後面要想辦法不要動用到 sessionStorage 就解決
+    window.sessionStorage.setItem('dragIndex', index);
 }
 
 function dropped(e) {
     cancelDefault(e);
+    removePlaceHint(e);
+    console.log(e);
     const oldIndex = e.dataTransfer.getData('text/plain');
     if (e.target.id == 'trash') {
         document.querySelector('.drag').remove();
@@ -72,9 +80,26 @@ function dropped(e) {
     const newIndex = getItemIndex(e);
     const eParent = e.target.parentNode;
 
-    switchElmnt(oldIndex, newIndex, eParent);
+    // switchElmnt(oldIndex, newIndex, eParent);
+    insertElmnt(oldIndex, newIndex, eParent);
 
     RenderSort('#app');
+}
+
+function insertElmnt(oldIndex, newIndex, ParentNode) {
+    if (oldIndex == newIndex) {
+        return;
+    }
+    const oldElmnt = ParentNode.children[oldIndex];
+    const newElmnt = ParentNode.children[newIndex];
+
+    oldElmnt.remove();
+    if (oldIndex > newIndex) {
+        ParentNode.insertBefore(oldElmnt, newElmnt);
+    } else {
+        ParentNode.insertBefore(oldElmnt, newElmnt.nextSibling);
+    }
+    
 }
 
 function switchElmnt(oldIndex, newIndex, ParentNode) {
@@ -97,11 +122,54 @@ function removeElmnt(index, ParentNode) {
 
 function cancelDefault(e) {
     if (e.target.id == 'trash') {
-        e.target.className = 'fas fa-trash-restore'
+        e.target.className = 'fas fa-trash-restore';
     }
     e.preventDefault();
     e.stopPropagation();
     return false;
+}
+
+function placeHint(e) {
+    if (e.target.id == 'trash') {
+        return;
+    }
+
+    // const oldIndex = e.dataTransfer.getData('text/plain');
+    const newIndex = getItemIndex(e);
+    // 繞路的部分，後面要想辦法不要動用到 sessionStorage 就解決
+    const indexDivi = window.sessionStorage.getItem('dragIndex') - newIndex
+    const newElmnt = e.target;
+
+    if (!indexDivi) {
+        return;
+    } else if (indexDivi < 0) {
+        newElmnt.classList.add('upperHint')
+    } else {
+        newElmnt.classList.add('lowerHint')
+    }
+}
+
+function removePlaceHint(e) {
+    if (e.target.id == 'trash') {
+        return;
+    }
+
+    const oldIndex = e.dataTransfer.getData('text/plain');
+    const newIndex = getItemIndex(e);
+    const eParent = e.target.parentNode;
+    const newElmnt = eParent.children[newIndex];
+    
+    if (oldIndex == newIndex) {
+        return;
+    } 
+    // else if (oldIndex < newIndex) {
+    //     newElmnt.classList.remove('lowerHint')
+    // } else {
+    //     newElmnt.classList.remove('upperHint')
+    // }
+    else {
+        newElmnt.classList.remove('upperHint') || newElmnt.classList.remove('lowerHint');
+    }
 }
 
 function RenderSort(targetId) {
