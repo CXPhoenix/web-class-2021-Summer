@@ -29,7 +29,7 @@ function renderModal() {
     modal.appendChild(row3);
 
     const btn = document.createElement('button');
-    btn.className = 'bg-blue-600 hover:bg-blue-800 rounded-lg text-center py-3';
+    btn.className = 'bg-blue-600 hover:bg-blue-800 rounded-lg text-center py-3 select-none';
     btn.innerHTML = '<span class="text-white">我知道了！</span>'
     btn.addEventListener('click', function(e) {
         e.stopPropagation();
