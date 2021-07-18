@@ -24,29 +24,30 @@
                 <span class="text-2xl sm:text-3xl md:text-4xl">課程目錄</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 p-5">
-                <a href="./Course/course1.html" class="text-center p-6 bg-blue-600 rounded-lg select-none cursor-pointer hover:bg-blue-800">
-                        <span class="block text-gray-50 text-lg">網站面面觀</span>
-                        <span class="block text-gray-200 text-base">認識 web and HTML</span>
+                <a href="./Course/course1.html"
+                    class="text-center p-6 bg-blue-600 rounded-lg select-none cursor-pointer hover:bg-blue-800">
+                    <span class="block text-gray-50 text-lg">網站面面觀</span>
+                    <span class="block text-gray-200 text-base">認識 web and HTML</span>
                 </a>
                 <a class="text-center p-6 bg-blue-600 rounded-lg select-none cursor-pointer hover:bg-blue-800">
-                        <span class="block text-gray-50 text-lg">想要好看的頁面?</span>
-                        <span class="block text-gray-200 text-base">增加香料 CSS</span>
+                    <span class="block text-gray-50 text-lg">想要好看的頁面?</span>
+                    <span class="block text-gray-200 text-base">增加香料 CSS</span>
                 </a>
                 <a class="text-center p-6 bg-blue-600 rounded-lg select-none cursor-pointer hover:bg-blue-800">
-                        <span class="block text-gray-50 text-lg">工程師就是懶!</span>
-                        <span class="block text-gray-200 text-base">使用 CSS Framework</span>
+                    <span class="block text-gray-50 text-lg">工程師就是懶!</span>
+                    <span class="block text-gray-200 text-base">使用 CSS Framework</span>
                 </a>
                 <a class="text-center p-6 bg-blue-600 rounded-lg select-none cursor-pointer hover:bg-blue-800">
-                        <span class="block text-gray-50 text-lg">為你的網頁加一點功能</span>
-                        <span class="block text-gray-200 text-base">加入 JavaScript 魔法</span>
+                    <span class="block text-gray-50 text-lg">為你的網頁加一點功能</span>
+                    <span class="block text-gray-200 text-base">加入 JavaScript 魔法</span>
                 </a>
                 <a class="text-center p-6 bg-blue-600 rounded-lg select-none cursor-pointer hover:bg-blue-800">
-                        <span class="block text-gray-50 text-lg">加密的情話(1)</span>
-                        <span class="block text-gray-200 text-base">QRcode 產生器專題</span>
+                    <span class="block text-gray-50 text-lg">加密的情話(1)</span>
+                    <span class="block text-gray-200 text-base">QRcode 產生器專題</span>
                 </a>
                 <a class="text-center p-6 bg-blue-600 rounded-lg select-none cursor-pointer hover:bg-blue-800">
-                        <span class="block text-gray-50 text-lg">加密的情話(2)</span>
-                        <span class="block text-gray-200 text-base">QRcode 產生器 上架</span>
+                    <span class="block text-gray-50 text-lg">加密的情話(2)</span>
+                    <span class="block text-gray-200 text-base">QRcode 產生器 上架</span>
                 </a>
             </div>
         </div>
@@ -57,6 +58,25 @@
             Power By CXPhoenix
         </div>
     </footer>
+
+    <div id="NotReleaseModal" class="hidden">
+        <div class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+            <div class="bg-white rounded-xl w-full sm:w-3/4 md:w-1/2 h-auto grid grid-cols-1 p-6 gap-3">
+                <div class="text-center">
+                    <i class="fas fa-tools text-xl sm:text-2xl md:text-3xl"></i>
+                </div>
+                <div class="text-center">
+                    <span class="text-lg sm:text-xl md:text-2xl">Opps! 尚未開放...</span>
+                </div>
+                <div class="text-center">
+                    <span class="text-base sm:text-lg md:text-xl">本區域還在施工，所以沒有開放喔～</span>
+                </div>
+                <button id="NotReleaseModalBtn" onclick="closeModal" class="bg-blue-600 hover:bg-blue-800 rounded-lg text-center py-3 select-none">
+                    <span class="text-white">我知道了！</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script src="./js/index.js"></script>
 </body>
