@@ -8,20 +8,38 @@ const htmlData = [
     '<a href="http://www.google.com/" style="display: block;">連結到個人網頁</a>'
 ]
 
-setDraggableElmnts(htmlData);
-RenderSort('#app');
+setDraggableElmnts(htmlData, 'ul.moveable');
+setDraggableElmnts(htmlData, '#HTML-xs-Editor ul.moveable');
+RenderPreview('#preview');
+RenderPreview('#Preview-xs-Viewer', '#HTML-xs-Editor');
+
 document.querySelector('.btn.add').addEventListener('click', addItemBar);
-document.querySelector('.btn.save').addEventListener('click', saveHTML);
+document.querySelector('.btn.save').addEventListener('click', saveFile);
+document.querySelector('#HTML-xs-EditorTool .btn.add').addEventListener('click', addItemBar);
+document.querySelector('#HTML-xs-EditorTool .btn.save').addEventListener('click', saveFile);
 const trash = document.querySelector('#trash');
 trash.addEventListener('drop', dropped);
 trash.addEventListener('dragenter', cancelDefault);
 trash.addEventListener('dragover', cancelDefault);
-trash.addEventListener('dragleave', function(e){e.target.className = "fas fa-trash";});
+trash.addEventListener('dragleave', function (e) {
+    e.target.className = "fas fa-trash";
+    e.target.parentNode.classList.remove('opacity-100');
+    e.target.parentNode.classList.add('opacity-40');
+});
+const trashxs = document.querySelector('#trash-xs');
+trashxs.addEventListener('drop', dropped);
+trashxs.addEventListener('dragenter', cancelDefault);
+trashxs.addEventListener('dragover', cancelDefault);
+trashxs.addEventListener('dragleave', function (e) {
+    e.target.className = "fas fa-trash";
+    e.target.parentNode.classList.remove('opacity-100');
+    e.target.parentNode.classList.add('opacity-40');
+});
 
 
 /* functions */
-function setDraggableElmnts(contents) {
-    const container = document.querySelector('ul.moveable');
+function setDraggableElmnts(contents, elmnt) {
+    const container = document.querySelector(elmnt);
 
     contents.forEach(data => {
         const li = document.createElement('li');
@@ -30,8 +48,8 @@ function setDraggableElmnts(contents) {
         li.setAttribute('draggable', 'true');
         li.addEventListener('dragstart', dragStart);
         li.addEventListener('drop', dropped);
-        li.addEventListener('dragenter',cancelDefault);
-        li.addEventListener('dragover', function(e) {
+        li.addEventListener('dragenter', cancelDefault);
+        li.addEventListener('dragover', function (e) {
             cancelDefault(e);
             placeHint(e);
         });
@@ -71,10 +89,12 @@ function dropped(e) {
     removePlaceHint(e);
     console.log(e);
     const oldIndex = e.dataTransfer.getData('text/plain');
-    if (e.target.id == 'trash') {
+    if (e.target.id == 'trash' || e.target.id == 'trash-xs') {
         document.querySelector('.drag').remove();
-        RenderSort('#app');
+        // RenderSort('#app');
         e.target.className = "fas fa-trash";
+        e.target.parentNode.classList.remove('opacity-100');
+        e.target.parentNode.classList.add('opacity-40');
         return;
     }
     const newIndex = getItemIndex(e);
@@ -83,7 +103,7 @@ function dropped(e) {
     // switchElmnt(oldIndex, newIndex, eParent);
     insertElmnt(oldIndex, newIndex, eParent);
 
-    RenderSort('#app');
+    // RenderSort('#app');
 }
 
 function insertElmnt(oldIndex, newIndex, ParentNode) {
@@ -99,7 +119,7 @@ function insertElmnt(oldIndex, newIndex, ParentNode) {
     } else {
         ParentNode.insertBefore(oldElmnt, newElmnt.nextSibling);
     }
-    
+
 }
 
 function switchElmnt(oldIndex, newIndex, ParentNode) {
@@ -121,8 +141,10 @@ function removeElmnt(index, ParentNode) {
 }
 
 function cancelDefault(e) {
-    if (e.target.id == 'trash') {
+    if (e.target.id == 'trash' || e.target.id == 'trash-xs') {
         e.target.className = 'fas fa-trash-restore';
+        e.target.parentNode.classList.remove('opacity-40');
+        e.target.parentNode.classList.add('opacity-100');
     }
     e.preventDefault();
     e.stopPropagation();
@@ -130,7 +152,7 @@ function cancelDefault(e) {
 }
 
 function placeHint(e) {
-    if (e.target.id == 'trash') {
+    if (e.target.id == 'trash' || e.target.id == 'trash-xs') {
         return;
     }
 
@@ -150,7 +172,7 @@ function placeHint(e) {
 }
 
 function removePlaceHint(e) {
-    if (e.target.id == 'trash') {
+    if (e.target.id == 'trash' || e.target.id == 'trash-xs') {
         return;
     }
 
@@ -158,10 +180,10 @@ function removePlaceHint(e) {
     const newIndex = getItemIndex(e);
     const eParent = e.target.parentNode;
     const newElmnt = eParent.children[newIndex];
-    
+
     if (oldIndex == newIndex) {
         return;
-    } 
+    }
     // else if (oldIndex < newIndex) {
     //     newElmnt.classList.remove('lowerHint')
     // } else {
@@ -172,19 +194,17 @@ function removePlaceHint(e) {
     }
 }
 
-function RenderSort(targetId) {
-    const input = document.querySelectorAll('ul.moveable>li>input');
-    const targetElmnt = document.querySelector(targetId);
-    targetElmnt.innerHTML = '<div class="preview"><span class="title">預覽</span></div><hr />'
-    input.forEach(item => {
-        targetElmnt.innerHTML += item.value;
-    })
-}
-
 function addItemBar() {
-    const target = document.querySelector('ul.moveable');
-    const li = document.createElement('li');
-    const input = document.createElement('input');
+    let target, li, input;
+    if (document.body.clientWidth < 640) {
+        target = document.querySelector('#HTML-xs-Editor ul.moveable');
+        li = document.createElement('li');
+        input = document.createElement('input');
+    } else {
+        target = document.querySelector('ul.moveable');
+        li = document.createElement('li');
+        input = document.createElement('input');
+    }
 
     li.setAttribute('draggable', 'true');
     li.addEventListener('dragstart', dragStart);
@@ -195,9 +215,9 @@ function addItemBar() {
     input.value = '';
     input.placeholder = '輸入 html 程式碼'
     input.style.width = '90%';
-    input.onkeyup = function () {
-        RenderSort('#app')
-    };
+    // input.onkeyup = function () {
+    //     RenderSort('#app')
+    // };
 
     li.appendChild(input)
     target.appendChild(li);
@@ -220,31 +240,51 @@ function saveHTML() {
     content += `\n    </body>\n</html>`;
 
     console.log(content);
-    saveFile(content);
+    // saveFile(content);
 }
 
-function saveFile(content) {
-    const fileBlob = new Blob(Array.from(content))
+function saveFile() {
+    const contentElmnt = document.querySelectorAll('iframe');
+    let content = ''
+    if (document.body.clientWidth >= 640) {
+        content = contentElmnt[0].srcdoc
+    } else {
+        content = contentElmnt[1].srcdoc
+    }
+    const fileBlob = new Blob(Array.from(content));
     const url = URL.createObjectURL(fileBlob);
     const a = document.createElement('a');
     a.setAttribute('download', 'index.html');
     a.setAttribute('target', '_blanl');
     a.setAttribute('href', url);
 
-    a.click()
+    a.click();
 }
 
-
-// practice function
-function setDraggableElmnts_old() {
-    const li = document.querySelectorAll('ul.moveable>li');
-
-    li.forEach((item, index) => {
-        item.setAttribute('draggable', 'true');
-        item.innerText = htmlData[index];
-        item.addEventListener('dragstart', dragStart);
-        item.addEventListener('drop', dropped);
-        item.addEventListener('dragenter', cancelDefault);
-        item.addEventListener('dragover', cancelDefault);
+function RenderPreview(elmntId, fromElmnt = '#HTMLEditor') {
+    const input = document.querySelectorAll(fromElmnt + ' ul.moveable>li>input');
+    let content = `<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>你的網站</title>
+    </head>
+    <body>\n\n`;
+    input.forEach(item => {
+        content += item.value + '\n';
     })
+    content += `\n    </body>\n</html>`;
+
+    const iframe = document.createElement('iframe');
+    iframe.className = 'w-full h-full overflow-visible'
+    iframe.sandbox = "allow-popups-to-escape-sandbox allow-scripts allow-popups allow-forms allow-pointer-lock allow-top-navigation allow-modals";
+    iframe.srcdoc = content;
+
+    if (elmntId === '#Preview-xs-Viewer') {
+        document.querySelector(elmntId).appendChild(iframe);
+        return;
+    }
+    document.querySelector(elmntId).insertBefore(iframe, document.querySelector(elmntId + '-AreaGap'));
 }
