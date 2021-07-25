@@ -1,0 +1,98 @@
+.gutter {
+    background-color: rgb(31, 41, 55);
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.gutter.gutter-horizontal {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+    cursor: col-resize;
+}
+
+#html-xs-Tab,
+#css-xs-Tab,
+#preview-xs-Tab {
+    -webkit-tap-highlight-color: rgba(255,255,255,0);
+}
+
+.editPanel,
+#HTMLEditorTool,
+#HTML-xs-EditorTool {
+    display: none;
+}
+
+#html:checked ~ .edit #HTMLEditor,
+#css:checked ~ .edit #CSSEditor {
+    display: block;
+}
+
+#html:checked ~ .tab#htmlTab,
+#css:checked ~ .tab#cssTab {
+    border-top: 3px solid darkcyan;
+}
+
+#html:checked ~ #HTMLEditorTool {
+    display: flex;
+}
+
+#html-xs:checked ~ #html-xs-Tab,
+#css-xs:checked ~ #css-xs-Tab,
+#preview-xs:checked ~ #preview-xs-Tab {
+    border-top: 2px solid darkcyan;
+}
+
+#html-xs:checked ~ .edit #HTML-xs-EditorTool {
+    display: flex;
+}
+
+#html-xs:checked ~ .edit #HTML-xs-Editor,
+#css-xs:checked ~ .edit #CSS-xs-Editor,
+#preview-xs:checked ~ .edit #Preview-xs-Viewer {
+    display: block;
+}
+
+
+#preview-xs:checked ~ .edit #edit-xs-AreaGap {
+    background-color: #fff;
+    height: 5vh;
+}
+
+[draggable=true] {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    text-align: center;
+}
+
+ul.moveable {
+    list-style: none;
+    margin: 2px auto;
+}
+
+ul.moveable li {
+    list-style-image: none;
+    margin: 10px;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 4px;
+    color: #666;
+    cursor: move;
+}
+
+ul.moveable li:hover {
+    background-color: #888;
+}
+
+ul.moveable li input {
+    font-size: 20px;
+    padding: 5px;
+}
+
+ul.moveable li.upperHint {
+    border-bottom: #FA0 solid 5px;
+}
+
+ul.moveable li.lowerHint {
+    border-top: #FA0 solid 5px;
+}
